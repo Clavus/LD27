@@ -91,6 +91,12 @@ function Sprite:reset()
 	
 end
 
+function Sprite:setCurrentFrame( frame )
+	
+	self._cur_frame = frame
+	
+end
+
 function Sprite:getCurrentFrame()
 	
 	return math.floor(self._cur_frame)

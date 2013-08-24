@@ -5,7 +5,7 @@ require("engine/engine_includes")
 require("game/game_includes")
 
 local _curTime
-local gameTitle = "LD27 - Bomb"
+local _gameTitle = "LD27 - Bomb"
 
 assertDebug = function() end
 
@@ -35,7 +35,7 @@ function love.draw()
 	love.graphics.setBackgroundColor( 30, 30, 40 )
 	love.graphics.clear()
 	game.draw()
-	love.graphics.setCaption(gameTitle.."  ("..love.timer.getFPS().." fps)")
+	love.graphics.setCaption(_gameTitle.."  ("..love.timer.getFPS().." fps)")
 	
 end
 

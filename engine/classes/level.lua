@@ -1,13 +1,16 @@
 
 Level = class('Level')
 
-function Level:initialize( leveldata )
+function Level:initialize( leveldata, use_physics )
 
 	self._leveldata = leveldata
 	self._camera = Camera()
 	
-	love.physics.setMeter(leveldata.physics.pixels_per_meter)
-    self._physworld = love.physics.newWorld(0, 0, true)
+	self._physics_enabled = use_physics
+	if (use_physics) then
+		love.physics.setMeter(leveldata.physics.pixels_per_meter)
+		self._physworld = love.physics.newWorld(0, 0, true)
+	end
 	
 	local objects = nil
 	if (leveldata) then
@@ -22,7 +25,11 @@ end
 function Level:update( dt )
 
 	self._camera:update(dt)
-	self._physworld:update(dt)
+	
+	if (self._physics_enabled) then
+		self._physworld:update(dt)
+	end
+	
 	self._entManager:update(dt)
 	
 end
@@ -150,5 +157,6 @@ function Level:getEntitiesByMixin( mixin )
 end
 
 function Level:setCollisionCallbacks( beginContact, endContact, preSolve, postSolve )
+	if not self._physics_enabled then return end
 	self._physworld:setCallbacks( beginContact, endContact, preSolve, postSolve )
 end

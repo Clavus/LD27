@@ -12,6 +12,8 @@ end
 
 function EntityManager:loadLevelObjects( level, levelobjects )
 	
+	self._level = level
+	
 	if (levelobjects and game.createLevelEntity) then
 	
 		for i,v in ipairs(levelobjects) do
@@ -33,6 +35,7 @@ function EntityManager:createEntity( class, ...)
 	
 	if (ent ~= nil and instanceOf(_G[class], ent)) then
 		table.insert(self._entities, ent)
+		--print("Created entity, new list:\n"..table.toString(self._entities,"self._entities",true))
 		self._update_drawlist = true
 		return ent
 	else
@@ -62,7 +65,9 @@ function EntityManager:preDraw()
 	
 	-- created sorted drawing lists per layer for entities
 	if (self._update_drawlist) then
-	
+		
+		local level = self._level
+		
 		self._drawlist = { _first = {}, _final = {} }
 		local layername
 		local campos = Vector(level:getCamera():getTargetPos())
@@ -86,6 +91,7 @@ function EntityManager:preDraw()
 		end
 		
 		self._update_drawlist = false
+		--print("Updated draw list:\n"..table.toString(self._drawlist,"self._drawlist",true))
 	end
 	
 	-- sort entities by depth

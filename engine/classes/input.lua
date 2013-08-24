@@ -6,7 +6,7 @@ Input controller
 
 bool InputController:keyIsPressed(key)
 bool InputController:keyIsReleased(key)
-bool InputController:mouseIsPressed(button)
+bool InputController:mouseIsPressed(button) -- l, r, m, wd, wu, x1, x2
 bool InputController:mouseIsReleased(button)
 bool InputController:keyIsDown(key)
 bool InputController:mouseIsDown(button)

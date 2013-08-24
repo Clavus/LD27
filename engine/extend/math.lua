@@ -92,3 +92,4 @@ function math.approachAngle( cur, target, inc )
 	return math.approach( cur, cur + diff, inc )
 	
 end
+
