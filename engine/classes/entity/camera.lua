@@ -16,6 +16,8 @@ function Camera:initialize()
 	self._easingfunc = easing.inOutQuint
 	self._easingstart = -100
 	self._easingduration = 2
+	self._easingamplitude = 10
+	self._easingperiod = 1
 	
 	self._targetscale = Vector(1,1)
 	self._scalespeed = 1
@@ -31,8 +33,8 @@ function Camera:update(dt)
 	
 		local t = engine.currentTime() - self._easingstart
 		if (t <= self._easingduration) then
-			self._pos.x = self._easingfunc(t, self._refpos.x, self._targetpos.x - self._refpos.x, self._easingduration)
-			self._pos.y = self._easingfunc(t, self._refpos.y, self._targetpos.y - self._refpos.y, self._easingduration)
+			self._pos.x = self._easingfunc(t, self._refpos.x, self._targetpos.x - self._refpos.x, self._easingduration, self._easingamplitude, self._easingperiod)
+			self._pos.y = self._easingfunc(t, self._refpos.y, self._targetpos.y - self._refpos.y, self._easingduration, self._easingamplitude, self._easingperiod)
 		else
 			self._pos = self._targetpos
 		end
@@ -182,6 +184,14 @@ function Camera:getScale()
 
 	return self._scale.x, self._scale.y
 
+end
+
+function Camera:setEasing( func, amp, period )
+	
+	self._easingfunc = func or self._easingfunc
+	self._easingamplitude = amp or self._easingamplitude
+	self._easingperiod = period or self._easingperiod
+	
 end
 
 function Camera:getPos()

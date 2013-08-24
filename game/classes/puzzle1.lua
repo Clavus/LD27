@@ -5,8 +5,6 @@ function Puzzle1:initialize()
 
 	Puzzle.initialize(self)
 	
-	self._wirecutter = { open = resource.getImage( FOLDER.ASSETS.."wirecutter.png", false ),
-						closed = resource.getImage( FOLDER.ASSETS.."wirecutter_closed.png", false ) }
 	self._image = resource.getImage( FOLDER.ASSETS.."puzzle1.png", false )
 	self._blink = resource.getImage( FOLDER.ASSETS.."armed_light.png", false )
 	self._blinktime = 0
@@ -50,9 +48,12 @@ function Puzzle1:update( dt )
 				wire.hover = true
 				if (clicked) then
 					wire.iscut = true
-					if (k == 4) then
+					if (k == 4) then -- orange
+						print("Completed puzzle 1")
+						self._completed = true
 						game.puzzleCompleted()
 					else
+						self._explode = true
 						game.explode()
 					end
 				end
@@ -90,14 +91,14 @@ function Puzzle1:draw()
 	draw(self._image, px, py)
 	
 	-- draw blinking light
-	if (math.floor(self._blinktime % 2) == 0) then
+	if ((math.floor(self._blinktime % 2) == 0 or self._explode) and not self._completed) then
 		draw(self._blink, px+251, py+243)
 	end
 	
-	if (input:mouseIsDown("l") and not game.getDisplay():isPaused()) then
-		draw(self._wirecutter.closed, mx, my)
-	else
-		draw(self._wirecutter.open, mx, my)
-	end
+end
+
+function Puzzle1:pointer()
+	
+	return "cutter"
 	
 end

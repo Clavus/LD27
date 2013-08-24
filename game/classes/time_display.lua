@@ -17,6 +17,9 @@ function TimeDisplay:update( dt )
 	
 	if not self._paused then
 		self._time = math.max(0, self._time - dt)
+		if (self._time <= 0) then
+			game.explode()
+		end
 	end
 	
 end
