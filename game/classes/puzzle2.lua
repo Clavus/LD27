@@ -44,7 +44,7 @@ function Puzzle2:initialize()
 	self._tiles[6][5].bomb = true
 	
 	self._tiles[4][6].bomb = true
-	self._tiles[3][6].bomb = true
+	self._tiles[2][6].bomb = true
 	
 	-- count the number of adjacent bombs and store this info in the tiles
 	for row, tab in ipairs( self._tiles ) do
@@ -216,7 +216,7 @@ function Puzzle2:propagateSelection(row, col)
 	end	
 	if (col+1 <= self._wtiles) then
 		tile = self._tiles[row][col+1]
-		if valid(tile) then select(tile, row, col+16, self) end
+		if valid(tile) then select(tile, row, col+1, self) end
 	end
 
 end

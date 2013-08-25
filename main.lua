@@ -5,7 +5,7 @@ require("engine/engine_includes")
 require("game/game_includes")
 
 local _curTime, _prntcnt
-local _gameTitle = "LD27 - Bomb"
+local _gameTitle = "LD27 - Four Bombs"
 
 assertDebug = function() end
 
@@ -13,7 +13,7 @@ assertDebug = function() end
 function love.load()
 	
 	-- Disable this on release, removes unnecessary asserts
-	assertDebug = assert
+	--assertDebug = assert
 	
 	_curTime = 0
 	_prntcnt = 0
