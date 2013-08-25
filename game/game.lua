@@ -46,9 +46,9 @@ function game.load()
 	
 	input:addKeyReleaseCallback("restart", "r", function() love.load() end)
 	input:addKeyReleaseCallback("pause", " ", function()
-		if not display:isActive() then display:start()
-		elseif (display:isPaused()) then display:continue()
-		else display:pause()  end
+		if not display:isActive() then display:start() end
+		--elseif (display:isPaused()) then display:continue()
+		--else display:pause()  end
 	end)
 	
 	current_puzzle = level:createEntity(puzzles[puzzle_id])
@@ -102,7 +102,7 @@ function game.moveToNextPuzzle()
 		
 		love.mouse.setVisible(current_puzzle:pointer() == "default")
 		
-		timer.simple(1, function() display:continue() end)
+		timer.simple(2, function() display:continue() end)
 	else
 		game.completed()
 	end

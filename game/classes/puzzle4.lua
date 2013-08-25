@@ -25,13 +25,14 @@ function Puzzle4:initialize()
 			--{ tcol = 1, fy = 2, img = resource.getImage( FOLDER.ASSETS.."pic_midleft.png", false ), obj = level:createEntity("ImagePart") }, -- this one we leave out
 			
 			{ tcol = 1, trow = 3, img = resource.getImage( FOLDER.ASSETS.."pic_bottomleft.png", false ), obj = level:createEntity("ImagePart") },
-			{ tcol = 3, trow = 2, img = resource.getImage( FOLDER.ASSETS.."pic_midright.png", false ), obj = level:createEntity("ImagePart") },
+			{ empty = true },
 			{ tcol = 3, trow = 3, img = resource.getImage( FOLDER.ASSETS.."pic_bottomright.png", false ), obj = level:createEntity("ImagePart") }
 		},
 		{
 			{ tcol = 2, trow = 3, img = resource.getImage( FOLDER.ASSETS.."pic_bottommid.png", false ), obj = level:createEntity("ImagePart") },
-			{ tcol = 2, trow = 2, img = resource.getImage( FOLDER.ASSETS.."pic_midmid.png", false ), obj = level:createEntity("ImagePart") },
-			{ empty = true }
+			{ tcol = 3, trow = 2, img = resource.getImage( FOLDER.ASSETS.."pic_midright.png", false ), obj = level:createEntity("ImagePart") },
+			{ tcol = 2, trow = 2, img = resource.getImage( FOLDER.ASSETS.."pic_midmid.png", false ), obj = level:createEntity("ImagePart") }
+			
 		}
 		
 	}

@@ -24,7 +24,7 @@ function Puzzle2:initialize()
 	self._tiles = {}
 	
 	self._bombcounter = 0
-	self._maxbombs = 5
+	self._maxbombs = 7
 	self._marks = 0
 	
 	-- construct the tiles
@@ -42,6 +42,9 @@ function Puzzle2:initialize()
 	self._tiles[4][5].bomb = true
 	self._tiles[5][5].bomb = true
 	self._tiles[6][5].bomb = true
+	
+	self._tiles[4][6].bomb = true
+	self._tiles[3][6].bomb = true
 	
 	-- count the number of adjacent bombs and store this info in the tiles
 	for row, tab in ipairs( self._tiles ) do
