@@ -5,6 +5,8 @@ function Puzzle1:initialize()
 
 	Puzzle.initialize(self)
 	
+	self._message = "Cut"
+	
 	self._image = resource.getImage( FOLDER.ASSETS.."puzzle1.png", false )
 	self._blink = resource.getImage( FOLDER.ASSETS.."armed_light.png", false )
 	self._blinktime = 0

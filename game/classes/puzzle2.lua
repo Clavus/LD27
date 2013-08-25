@@ -5,6 +5,8 @@ function Puzzle2:initialize()
 
 	Puzzle.initialize(self)
 	
+	self._message = "Sweep"
+	
 	self._image = resource.getImage( FOLDER.ASSETS.."puzzle2.png", false )
 	self._blink = resource.getImage( FOLDER.ASSETS.."armed_light.png", false )
 	self._blinktime = 0

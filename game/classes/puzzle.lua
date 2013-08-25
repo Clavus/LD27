@@ -6,6 +6,7 @@ function Puzzle:initialize()
 	Entity.initialize(self)
 	
 	self._animstart = 0
+	self._message = "Solve"
 	
 end
 
@@ -25,6 +26,12 @@ end
 function Puzzle:pointer()
 	
 	return "default" -- alternatives: "default", "cutter"
+	
+end
+
+function Puzzle:message()
+	
+	return self._message
 	
 end
 

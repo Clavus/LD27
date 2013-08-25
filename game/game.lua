@@ -40,7 +40,7 @@ function game.load()
 			love.graphics.rectangle( "fill", 0, 0, screenWidth(), screenHeight() )
 			love.graphics.setColor(255,255,255,255)
 			love.graphics.setFont(big_font)
-			love.graphics.printf( "Defuse the bomb", 0, screenHeight()/2-50, screenWidth(), "center" )
+			love.graphics.printf( "Four bombs", 0, screenHeight()/2-50, screenWidth(), "center" )
 			love.graphics.setFont(small_font)
 			love.graphics.printf( "Press space to get started", 0, screenHeight()/2+50, screenWidth(), "center" )
 		end
@@ -55,7 +55,7 @@ function game.load()
 	
 	current_puzzle = level:createEntity(puzzles[puzzle_id])
 	current_puzzle:setPos(puzzle_pos_x, puzzle_pos_y)
-	love.mouse.setVisible(current_puzzle:pointer() == "default")
+	game.startPuzzle()
 	
 	print("Game initialized")
 	
@@ -99,9 +99,23 @@ function game.moveToNextPuzzle()
 	current_puzzle:setPos(puzzle_pos_x+1600, puzzle_pos_y)
 	current_puzzle:enterScreen()
 	
-	love.mouse.setVisible(current_puzzle:pointer() == "default")
+	timer.simple(2, function()
+		game.startPuzzle()
+	end)
 	
-	timer.simple(2, function() display:continue() end)
+end
+
+function game.startPuzzle()
+	
+	love.mouse.setVisible(current_puzzle:pointer() == "default")
+	gui:addDynamicElement(100, Vector(0,0), function()
+		if display:isActive() then
+			love.graphics.setColor(200,200,200,255)
+			love.graphics.setFont(huge_font)
+			love.graphics.printf( current_puzzle:message(), screenHeight()/2+10, 5, screenWidth(), "left" )
+		end
+	end, "puzzle_message")
+	display:continue() 
 	
 end
 
@@ -109,6 +123,8 @@ function game.puzzleCompleted()
 	
 	display:pause()
 	puzzle_id = puzzle_id + 1
+	
+	gui:removeElement("puzzle_message")
 	
 	if (puzzles[puzzle_id]) then
 		playWav(snd_puzzcomplete, 1)

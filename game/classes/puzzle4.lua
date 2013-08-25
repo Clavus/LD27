@@ -5,6 +5,8 @@ function Puzzle4:initialize()
 
 	Puzzle.initialize(self)
 	
+	self._message = "Shift"
+	
 	self._image = resource.getImage( FOLDER.ASSETS.."puzzle4.png", false )
 	self._blink = resource.getImage( FOLDER.ASSETS.."armed_light.png", false )
 	self._blinktime = 0
