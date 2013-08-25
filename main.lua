@@ -4,7 +4,7 @@ engine = {}
 require("engine/engine_includes")
 require("game/game_includes")
 
-local _curTime
+local _curTime, _prntcnt
 local _gameTitle = "LD27 - Bomb"
 
 assertDebug = function() end
@@ -16,6 +16,7 @@ function love.load()
 	assertDebug = assert
 	
 	_curTime = 0
+	_prntcnt = 0
 	input = InputController()
 	game.load()
 	
@@ -75,5 +76,11 @@ function engine.currentTime()
 	
 	return _curTime
 	
+end
+
+local oldprint = print
+function print( str )
+	oldprint("[".._prntcnt.."] "..str)
+	_prntcnt = _prntcnt + 1
 end
 

@@ -9,7 +9,12 @@ function Puzzle2:initialize()
 	self._blink = resource.getImage( FOLDER.ASSETS.."armed_light.png", false )
 	self._blinktime = 0
 	
+	self._snd_select = resource.getSound(FOLDER.ASSETS.."sound/mswp_select.wav","static")
+	self._snd_mark = resource.getSound(FOLDER.ASSETS.."sound/mswp_mark.wav","static")
+	
 	self._tile_img = resource.getImage( FOLDER.ASSETS.."minesweeper_tile.png", false )
+	self._mark_img = resource.getImage( FOLDER.ASSETS.."mark.png", false )
+	self._mine_img = resource.getImage( FOLDER.ASSETS.."mine.png", false )
 	self._smiley = Sprite( SpriteData(FOLDER.ASSETS.."smileys.png", Vector(0,0), Vector(32, 32), Vector(16, 16), 4, 4, 0, false ) )
 	self._number = Sprite( SpriteData(FOLDER.ASSETS.."minesweeper_numbers.png", Vector(0,0), Vector(20, 20), Vector(10, 10), 4, 4, 0, false ) )
 	
@@ -32,11 +37,11 @@ function Puzzle2:initialize()
 	end
 	
 	-- define bomb locations (amount should equal self._maxbombs)
-	self._tiles[1][1].bomb = true
-	self._tiles[1][2].bomb = true
-	self._tiles[2][3].bomb = true
 	self._tiles[3][3].bomb = true
-	self._tiles[4][3].bomb = true
+	self._tiles[3][4].bomb = true
+	self._tiles[4][5].bomb = true
+	self._tiles[5][5].bomb = true
+	self._tiles[6][5].bomb = true
 	
 	-- count the number of adjacent bombs and store this info in the tiles
 	for row, tab in ipairs( self._tiles ) do
@@ -67,6 +72,8 @@ function Puzzle2:initialize()
 end
 
 function Puzzle2:update( dt )
+	
+	if (self._completed) then return end
 	
 	Puzzle.update( self, dt )
 	
@@ -110,6 +117,7 @@ function Puzzle2:update( dt )
 								self._explode = true
 								game.explode()
 							else
+								playWav( self._snd_select, 0.25 )
 								self:propagateSelection(row, col)
 							end
 						elseif (mldown) then -- primed
@@ -120,6 +128,7 @@ function Puzzle2:update( dt )
 					
 					if (mrclicked and not tile.primed) then
 						-- toggle mark
+						playWav( self._snd_mark, 0.25 )
 						if (tile.marked) then
 							tile.marked = false
 							self._marks = self._marks - 1
@@ -128,12 +137,12 @@ function Puzzle2:update( dt )
 							tile.marked = true
 							self._marks = self._marks + 1
 							if (tile.bomb) then self._bombcounter = self._bombcounter + 1 end
-							if (self._bombcounter == self._maxbombs and self._marks == self._maxbombs) then
-								print("Completed puzzle 2")
-								self._completed = true
-								self._smiley:setCurrentFrame(3)
-								game.puzzleCompleted()
-							end
+						end
+						if (self._bombcounter == self._maxbombs and self._marks == self._maxbombs) then
+							print("Completed puzzle 2")
+							self._completed = true
+							self._smiley:setCurrentFrame(3)
+							game.puzzleCompleted()
 						end
 					end
 					
@@ -177,41 +186,33 @@ function Puzzle2:propagateSelection(row, col)
 	if (row-1 > 0) then
 		if (col-1 > 0) then
 			tile = self._tiles[row-1][col-1]
-			--assert(tile == nil, "Error at "..(row-1)..", "..(col-1))
 			if valid(tile) then select(tile, row-1, col-1, self) end
 		end	
 		if (col+1 <= self._wtiles) then
 			tile = self._tiles[row-1][col+1]
-			--assert(tile == nil, "Error at "..(row-1)..", "..(col+1))
 			if valid(tile) then select(tile, row-1, col+1, self) end
 		end
 		tile = self._tiles[row-1][col]
-		--assert(tile == nil, "Error at "..(row-1)..", "..(col))
 		if valid(tile) then select(tile, row-1, col, self) end
 	end
 	if (row+1 <= self._htiles) then
 		if (col-1 > 0) then
 			tile = self._tiles[row+1][col-1]
-			--assert(tile == nil, "Error at "..(row+1)..", "..(col-1))
 			if valid(tile) then select(tile, row+1, col-1, self) end
 		end	
 		if (col+1 <= self._wtiles) then
 			tile = self._tiles[row+1][col+1]
-			--assert(tile == nil, "Error at "..(row+1)..", "..(col+1))
 			if valid(tile) then select(tile, row+1, col+1, self) end
 		end
 		tile = self._tiles[row+1][col]
-		--assert(tile == nil, "Error at "..(row+1)..", "..(col))
 		if valid(tile) then select(tile, row+1, col, self) end
 	end
 	if (col-1 > 0) then
 		tile = self._tiles[row][col-1]
-		--assert(tile == nil, "Error at "..(row)..", "..(col-1))
 		if valid(tile) then select(tile, row, col-1, self) end
 	end	
 	if (col+1 <= self._wtiles) then
 		tile = self._tiles[row][col+1]
-		--assert(tile == nil, "Error at "..(row)..", "..(col+1))
 		if valid(tile) then select(tile, row, col+16, self) end
 	end
 
@@ -236,12 +237,16 @@ function Puzzle2:draw()
 				draw(self._tile_img, tx, ty)
 				
 				if (tile.marked) then
-					setColor(255,100,100,200)
-					love.graphics.rectangle("fill", tx+4, ty+4, self._tilesize-8, self._tilesize-8)
+					draw(self._mark_img, tx, ty)
 				end
 			end
 			
-			if (tile.selected and tile.number > 0) then
+			if (tile.bomb and tile.selected) then
+				setColor(255,0,0,200)
+				love.graphics.rectangle("fill",tx,ty,self._tilesize,self._tilesize)
+				setColor(255,255,255,255)
+				draw(self._mine_img, tx, ty)
+			elseif (tile.selected and tile.number > 0) then
 				self._number:setCurrentFrame(math.min(4,tile.number))
 				self._number:draw(tx+self._tilesize/2, ty+self._tilesize/2)
 			end

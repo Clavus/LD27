@@ -9,6 +9,8 @@ function Puzzle1:initialize()
 	self._blink = resource.getImage( FOLDER.ASSETS.."armed_light.png", false )
 	self._blinktime = 0
 	
+	self._snd_cut = resource.getSound(FOLDER.ASSETS.."sound/wire_cut.wav","static")
+	
 	self._wires = {
 		{ default = resource.getImage( FOLDER.ASSETS.."wire_red.png", false ),
 		cut = resource.getImage( FOLDER.ASSETS.."wire_red_cut.png", false ) },
@@ -31,6 +33,8 @@ end
 
 function Puzzle1:update( dt )
 	
+	if (self._completed) then return end
+	
 	Puzzle.update( self, dt )
 	
 	local px, py = self:getPos()
@@ -48,6 +52,7 @@ function Puzzle1:update( dt )
 				wire.hover = true
 				if (clicked) then
 					wire.iscut = true
+					playWav(self._snd_cut, 0.2)
 					if (k == 4) then -- orange
 						print("Completed puzzle 1")
 						self._completed = true

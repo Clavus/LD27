@@ -2,6 +2,7 @@
 local level, display, gui, current_puzzle, puzzle_id, puzzles
 local small_font, big_font, huge_font
 local bkg_img, wirecutter
+local snd_explosion, snd_puzzcomplete
 local screenWidth, screenHeight = love.graphics.getWidth, love.graphics.getHeight
 
 puzzle_pos_x = 65
@@ -9,10 +10,12 @@ puzzle_pos_y = 135
 
 function game.load()
 	
-	love.mouse.setVisible(false)
 	small_font = love.graphics.newFont( 12 )
 	big_font = love.graphics.newFont( 36 )
 	huge_font = love.graphics.newFont( 128 )
+	
+	snd_explosion = resource.getSound(FOLDER.ASSETS.."sound/explosion.ogg","static")
+	snd_puzzcomplete = resource.getSound(FOLDER.ASSETS.."sound/puzzle_finished.wav","static")
 	
 	bkg_img = resource.getImage( FOLDER.ASSETS.."background.jpg", "repeat" )
 	wirecutter = { open = resource.getImage( FOLDER.ASSETS.."wirecutter.png", false ),
@@ -21,9 +24,9 @@ function game.load()
 	level = Level(LevelData(), false)
 	display = level:createEntity("TimeDisplay")
 	display:setPos(0, 0)
-	display:setTimer( 10 )
+	display:setTimer( 20 )
 	
-	puzzles = { "Puzzle1", "Puzzle2", "Puzzle1" }
+	puzzles = { "Puzzle1", "Puzzle2", "Puzzle3" }
 	puzzle_id = 1
 	
 	level:getCamera():moveTo(screenWidth()/2,screenHeight()/2, 0)
@@ -50,6 +53,7 @@ function game.load()
 	
 	current_puzzle = level:createEntity(puzzles[puzzle_id])
 	current_puzzle:setPos(puzzle_pos_x, puzzle_pos_y)
+	love.mouse.setVisible(current_puzzle:pointer() == "default")
 	
 	print("Game initialized")
 	
@@ -108,6 +112,7 @@ end
 function game.puzzleCompleted()
 	
 	display:pause()
+	playWav(snd_puzzcomplete, 1)
 	
 	gui:addDynamicElement(100, Vector(0,0), function()
 		love.graphics.setColor(0,0,0,200)
@@ -124,6 +129,8 @@ end
 function game.explode()
 	
 	display:pause()
+	
+	snd_explosion:play()
 	
 	local explode_start = engine.currentTime()
 	gui:addDynamicElement(100, Vector(0,0), function()
@@ -147,4 +154,10 @@ function game.getDisplay()
 
 	return display
 
+end
+
+-- function to deal with wav bug
+function playWav( snd, t )
+	snd:play()
+	timer.simple(t, function() snd:stop() end)
 end
