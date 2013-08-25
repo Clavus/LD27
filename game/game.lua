@@ -1,5 +1,5 @@
 
-local level, display, gui, current_puzzle, puzzle_id, puzzles
+local display, gui, current_puzzle, puzzle_id, puzzles
 local small_font, big_font, huge_font
 local bkg_img, wirecutter
 local snd_explosion, snd_puzzcomplete
@@ -24,9 +24,9 @@ function game.load()
 	level = Level(LevelData(), false)
 	display = level:createEntity("TimeDisplay")
 	display:setPos(0, 0)
-	display:setTimer( 20 )
+	display:setTimer( 10 )
 	
-	puzzles = { "Puzzle1", "Puzzle2", "Puzzle3" }
+	puzzles = { "Puzzle1", "Puzzle2", "Puzzle3", "Puzzle4" }
 	puzzle_id = 1
 	
 	level:getCamera():moveTo(screenWidth()/2,screenHeight()/2, 0)

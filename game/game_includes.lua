@@ -6,5 +6,6 @@ require("game/classes/puzzle")
 require("game/classes/puzzle1")
 require("game/classes/puzzle2")
 require("game/classes/puzzle3")
+require("game/classes/puzzle4")
 
 require("game/game")

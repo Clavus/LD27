@@ -33,9 +33,9 @@ end
 
 function Puzzle1:update( dt )
 	
-	if (self._completed) then return end
-	
 	Puzzle.update( self, dt )
+	
+	if (self._completed) then return end
 	
 	local px, py = self:getPos()
 	local mx, my = love.mouse.getPosition()

@@ -73,18 +73,18 @@ end
 
 function Puzzle2:update( dt )
 	
-	if (self._completed) then return end
-	
 	Puzzle.update( self, dt )
 	
 	local px, py = self:getPos()
+	self._fieldx = px + 340
+	self._fieldy = py + 220
+	
+	if (self._completed) then return end
+	
 	local mx, my = love.mouse.getPosition()
 	local mldown = false
 	local mlreleased = false
 	local mrclicked = false
-	
-	self._fieldx = px + 340
-	self._fieldy = py + 220
 	
 	if not game.getDisplay():isPaused() then
 	
